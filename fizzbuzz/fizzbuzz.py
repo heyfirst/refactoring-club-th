@@ -1,12 +1,50 @@
+from abc import abstractmethod
+from typing import List
+
+
+class Rule:
+    @abstractmethod
+    def handle(self, num: int) -> bool:
+        pass
+
+    @abstractmethod
+    def say(self) -> str:
+        pass
+
+
+class FizzBuzzRule(Rule):
+    def handle(self, num: int) -> bool:
+        return num % 15 == 0
+
+    def say(self) -> str:
+        return "fizzbuzz"
+
+
+class FizzRule(Rule):
+    def handle(self, num: int) -> bool:
+        return num % 3 == 0
+
+    def say(self) -> str:
+        return "fizz"
+
+
+class BuzzRule(Rule):
+    def handle(self, num: int) -> bool:
+        return num % 5 == 0
+
+    def say(self) -> str:
+        return "buzz"
+
+
 class FizzBuzz:
-    def say(self, num: int):
-        if num % 15 == 0:
-            return "fizzbuzz"
+    rules: List[Rule] = []
 
-        if num % 3 == 0:
-            return "fizz"
+    def __init__(self, rules: List[Rule]):
+        self.rules = rules
 
-        if num % 5 == 0:
-            return "buzz"
+    def say(self, num: int) -> str:
+        for rule in self.rules:
+            if rule.handle(num):
+                return rule.say()
 
-        return num
+        return str(num)
